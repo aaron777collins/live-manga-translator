@@ -134,13 +134,17 @@ class ScreenTranslatorApp:
         for text, x, y, w, h in grouped_text_data:
             if text.strip():  # Ensure the text is not empty
                 try:
-                    translated_text = self.translator.translate(text, dest='en').text
-                    cv2.rectangle(image, (x, y), (x + w, y + h), (255, 255, 255), -1)
-                    cv2.putText(image, translated_text, (x, y + h), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+                    translation = self.translator.translate(text, dest='en')
+                    if translation and hasattr(translation, 'text'):
+                        translated_text = translation.text
+                        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 255, 255), -1)
+                        cv2.putText(image, translated_text, (x, y + h), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+                    else:
+                        print("Translation failed or returned None.")
                 except Exception as e:
                     print(f"Translation failed: {e}")
-                else:
-                    print("Empty text skipped.")
+            else:
+                print("Empty text skipped.")
         return image
 
     def update_live_feed(self, image):
