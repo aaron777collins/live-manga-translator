@@ -1,0 +1,6 @@
+opencv-python
+pytesseract
+googletrans
+Pillow
+pygetwindow
+pyautogui
